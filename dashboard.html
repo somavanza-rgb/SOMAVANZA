@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Somavanza | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+<link rel="manifest" href="assets/favicon/site.webmanifest"></head>
+  <body data-page="dashboard">
+    <div class="dashboard">
+      <aside class="sidebar">
+        <div class="logo-wrap">
+          <div class="brand-mark"><img src="assets/somavanza-logo.jpg" alt="Somavanza logo" class="brand-logo"></div>
+          <div>
+            <p>Somavanza</p>
+            <span>Campus</span>
+          </div>
+        </div>
+
+        <nav class="nav-menu">
+          <a class="active" href="dashboard.html">Overview</a>
+          <a href="my-classes.html">My classes</a>
+          <a href="subjects.html">Subjects</a>
+          <a href="progress.html">Progress</a>
+          <a href="materials.html">Materials</a>
+          <a href="assessment.html">Assessment</a>
+        </nav>
+      </aside>
+
+      <main class="content-panel">
+        <header class="topbar">
+          <div>
+            <p class="greeting" id="greetingText">Good morning</p>
+            <h1>Learning dashboard</h1>
+          </div>
+
+          <div class="top-actions">
+            <button class="primary-btn" id="logoutBtn">Log out</button>
+          </div>
+        </header>
+
+        <section class="stats-grid">
+          <article class="stat-card gradient-one">
+            <span>Hours learned</span>
+            <strong>32.4h</strong>
+            <small>+8.2% this week</small>
+          </article>
+          <article class="stat-card gradient-two">
+            <span>Live classes</span>
+            <strong>12</strong>
+            <small>4 upcoming</small>
+          </article>
+          <article class="stat-card gradient-three">
+            <span>Assignments</span>
+            <strong>18</strong>
+            <small>6 pending</small>
+          </article>
+          <article class="stat-card gradient-four">
+            <span>Average score</span>
+            <strong>86%</strong>
+            <small>Top class rank</small>
+          </article>
+        </section>
+
+        <section class="panel-box subject-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Subjects</p>
+              <h2>Explore your courses</h2>
+            </div>
+            <a href="#">View all</a>
+          </div>
+
+          <div class="subject-grid" id="subjectGrid"></div>
+        </section>
+
+        <section class="lower-grid">
+          <article class="panel-box">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Schedule</p>
+                <h2>Today's live classes</h2>
+              </div>
+              <span class="tag" id="todayLessonCount">No lessons</span>
+            </div>
+
+            <div class="class-list" id="todayLessonsList"></div>
+          </article>
+
+          <article class="panel-box detail-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Focus area</p>
+                <h2 id="detailTitle">Mathematics</h2>
+              </div>
+              <span class="tag" id="detailBadge">Beginner</span>
+            </div>
+
+            <div class="detail-body">
+              <div class="progress-ring">
+                <div class="ring-center">
+                  <strong id="detailProgress">76%</strong>
+                </div>
+              </div>
+
+              <div class="detail-copy">
+                <p id="detailTeacher">Teacher: Not assigned</p>
+                <p id="detailSchedule">Next class: Today • 4:00 PM</p>
+                <p id="detailSummary">
+                  A strong focus on algebra, problem-solving, and exam technique for the upcoming term tests.
+                </p>
+              </div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

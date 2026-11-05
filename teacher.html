@@ -1,0 +1,689 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Somavanza | Teacher Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; min-height: 100%; height: 100%; }
+      body { font-family: Inter, Arial, sans-serif; overflow: hidden; }
+      .page-shell { height: 100vh; min-height: 100vh; padding: 0; }
+      .auth-screen {
+        min-height: 100vh; height: 100vh; overflow: auto;
+        display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+        align-items: stretch; gap: clamp(20px, 4vw, 56px);
+        padding: clamp(18px, 3vw, 42px);
+      }
+      .brand-panel, .auth-card { min-width: 0; }
+      .brand-panel { display:flex; flex-direction:column; justify-content:space-between; gap:24px; }
+      .hero-copy { max-width: 620px; }
+      .hero-copy h1 { font-size: clamp(1.8rem, 3vw, 3.1rem); line-height:1.12; margin:12px 0; }
+      .hero-copy p { line-height:1.55; }
+      .feature-list { display:flex; flex-wrap:wrap; gap:24px; }
+      .auth-card { align-self:center; width:100%; max-width:470px; justify-self:center; padding:clamp(20px, 3vw, 34px); }
+      .auth-card form { display:grid; gap:14px; }
+      .auth-card input:not([type=checkbox]) { width:100%; min-width:0; }
+      .dashboard {
+        width:100vw; max-width:100vw; height:100vh; min-height:100vh; overflow:hidden;
+        display:grid; grid-template-columns:220px minmax(0,1fr);
+        margin:0;
+      }
+      .dashboard.hidden { display:none !important; }
+      .sidebar {
+        height:100vh; overflow-y:auto; position:sticky; top:0; padding:18px 14px;
+        align-self:stretch; border-right:1px solid rgba(255,255,255,0.08);
+      }
+      .nav-menu { display:flex; flex-direction:column; gap:6px; }
+      .nav-menu a { padding:10px 12px; border-radius:10px; }
+      .content-panel {
+        min-width:0; height:100vh; overflow-y:auto; padding:20px clamp(16px, 2.2vw, 30px);
+        scrollbar-width: thin; scroll-behavior:smooth;
+      }
+      .topbar { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:16px; }
+      .topbar h1 { font-size:clamp(1.35rem, 2vw, 2rem); margin:4px 0; }
+      .stats-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:14px; }
+      .stat-card { padding:14px; min-width:0; }
+      .stat-card strong { display:block; font-size:clamp(1.35rem, 2vw, 1.9rem); margin:5px 0; }
+      .teacher-main-grid, .lower-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-bottom:14px; }
+      .roster-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+      .roster-card { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 14px; border-radius:14px; background: rgba(255,255,255,0.04); border:1px solid rgba(158, 170, 208, 0.22); }
+      .roster-card strong { display:block; margin-bottom:4px; }
+      .roster-actions { display:flex; align-items:center; gap:10px; }
+      .roster-badge { display:inline-flex; align-items:center; justify-content:center; min-width:52px; height:30px; padding:0 10px; border-radius:999px; background: rgba(91, 99, 255, 0.14); color:#9ec4ff; font-size:0.72rem; font-weight:700; }
+      .delete-btn { background: rgba(239, 68, 68, 0.12); color:#ef4444; border:1px solid rgba(239, 68, 68, 0.2); }
+      .delete-btn:hover { background: rgba(239, 68, 68, 0.18); }
+      .assignment-list { display:grid; gap:12px; }
+      .assignment-item { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 14px; border-radius:12px; background: rgba(255,255,255,0.03); border:1px solid rgba(158, 170, 208, 0.18); }
+      .assignment-item strong { display:block; margin-bottom:4px; }
+      .assignment-actions { display:flex; gap:8px; }
+      .assignment-result { display:block; margin-top:6px; font-size:0.72rem; color:#a7d8f7; }
+      .tiny-btn { padding:7px 10px; border-radius:10px; font-size:0.72rem; }
+      .grade-modal { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background: rgba(5, 10, 20, 0.58); z-index:30; }
+      .grade-modal.hidden { display:none; }
+      .grade-modal-content { width:min(440px, calc(100vw - 32px)); background:#f4f7ff; color:#0f172a; border-radius:18px; padding:20px; box-shadow:0 25px 60px rgba(15, 23, 42, 0.25); }
+      .grade-modal-content label { display:grid; gap:8px; font-weight:600; margin:16px 0 10px; }
+      .grade-modal-content input { width:100%; border:1px solid rgba(99, 102, 241, 0.2); border-radius:10px; padding:11px 12px; font-size:1rem; }
+      .grade-result-box { margin-top:12px; padding:10px 12px; border-radius:10px; background:#ecfdf5; color:#0f766e; font-weight:700; }
+      .grade-modal-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:16px; }
+      .panel-box, .summary-card { min-width:0; padding:16px; }
+      .panel-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+      .panel-header h2 { font-size:1.05rem; margin:3px 0; }
+      .quick-action-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+      .action-card { padding:12px; min-width:0; }
+      .attendance-ring-wrap { display:flex; align-items:center; justify-content:space-around; gap:12px; }
+      .attendance-ring { flex-shrink:0; }
+      .class-list, .student-list { display:grid; gap:8px; }
+      .class-item { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 0; }
+      .report-list { display:grid; gap:10px; }
+      .report-item { display:grid; grid-template-columns: 1fr auto; gap:8px; align-items:center; padding:10px 12px; border-radius:12px; background: rgba(255,255,255,0.03); border:1px solid rgba(180, 198, 255, 0.12); }
+      .report-item strong { font-size:0.9rem; }
+      .report-meta { display:flex; flex-direction:column; gap:3px; }
+      .report-score { font-size:0.8rem; font-weight:700; padding:5px 8px; border-radius:999px; background: rgba(46, 196, 182, 0.12); color:#8fe9d9; }
+      .summary-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+      .form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+      .upload-form label { min-width:0; }
+      .upload-form input, .upload-form select, .upload-form textarea { width:100%; min-width:0; }
+      .upload-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+      .upload-item { min-width:0; padding:12px; }
+      .upload-item h3 { font-size:.95rem; overflow-wrap:anywhere; }
+      .materials-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:16px; }
+      .sub-panel { padding:16px; border-radius:16px; background: rgba(255,255,255,0.02); border:1px solid rgba(157, 174, 217, 0.2); }
+      .resource-list { display:grid; gap:10px; margin-top:12px; }
+      .resource-item-box { display:flex; justify-content:space-between; gap:10px; align-items:center; padding:10px 12px; border-radius:12px; background: rgba(255,255,255,0.03); border:1px solid rgba(157, 174, 217, 0.14); }
+      .resource-item-box small { display:block; color:#c9d9ff; }
+      .resource-pill { display:inline-flex; align-items:center; justify-content:center; min-width:60px; height:24px; padding:0 8px; border-radius:999px; background: rgba(89, 164, 255, 0.12); color:#8ec5ff; font-size:0.68rem; font-weight:700; }
+      .form-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+      button, a { cursor:pointer; }
+      @media (max-width: 1000px) {
+        .dashboard { grid-template-columns:180px minmax(0,1fr); }
+        .stats-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+        .teacher-main-grid, .lower-grid { grid-template-columns:1fr; }
+      }
+      @media (max-width: 700px) {
+        .auth-screen { height:auto; min-height:100vh; grid-template-columns:1fr; gap:22px; padding:18px; }
+        .brand-panel { gap:18px; }
+        .feature-list { gap:18px; }
+        .auth-card { max-width:none; }
+        .dashboard { height:auto; min-height:100vh; display:flex; flex-direction:column; overflow:visible; }
+        .sidebar { height:auto; position:static; overflow:visible; }
+        .nav-menu { flex-direction:row; overflow-x:auto; padding-bottom:4px; }
+        .nav-menu a { white-space:nowrap; }
+        .content-panel { height:auto; overflow:visible; padding:16px; }
+        .topbar { align-items:flex-start; }
+        .quick-action-grid, .summary-grid, .form-grid, .upload-list { grid-template-columns:1fr; }
+        .attendance-ring-wrap { justify-content:flex-start; }
+      }
+    </style>
+
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+<link rel="manifest" href="assets/favicon/site.webmanifest"></head>
+  <body data-page="teacher">
+    <div class="page-shell">
+      <section class="auth-screen" id="teacherAuthScreen">
+        <div class="brand-panel">
+          <div class="brand-row">
+            <div class="brand-mark"><img src="assets/somavanza-logo.jpg" alt="Somavanza logo" class="brand-logo"></div>
+            <div>
+              <p class="eyebrow">Somavanza</p>
+              <h2>Teacher portal</h2>
+            </div>
+          </div>
+
+          <div class="hero-copy">
+            <span class="pill">Classroom management</span>
+            <h1>Teach, monitor, and publish lessons with confidence.</h1>
+            <p>
+              Manage your classes, review student progress, post learning material,
+              and track assignments from one place.
+            </p>
+          </div>
+
+          <div class="feature-list">
+            <div>
+              <strong>8</strong>
+              <span>Classes</span>
+            </div>
+            <div>
+              <strong>240</strong>
+              <span>Students</span>
+            </div>
+            <div>
+              <strong>96%</strong>
+              <span>Engagement</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="auth-card">
+          <div class="login-header">
+            <p>Welcome teacher</p>
+            <h3>Teacher login</h3>
+          </div>
+
+          <form id="teacherLoginForm">
+            <label>
+              <span>Email address</span>
+              <input type="email" id="teacherEmail" placeholder="teacher@Somavanza.com" required />
+            </label>
+
+            <label>
+              <span>Password</span>
+              <input type="password" id="teacherPassword" placeholder="••••••••" required />
+            </label>
+
+            <div class="remember-row">
+              <label class="checkbox-wrap">
+                <input type="checkbox" checked />
+                <span>Keep me signed in</span>
+              </label>
+              <a href="#">Need help?</a>
+            </div>
+
+            <button type="submit" class="primary-btn">Login to teacher dashboard</button>
+          </form>
+
+          <div class="account-actions">
+            <a href="index.html" class="secondary-btn teacher-link-btn">Student portal</a>
+          </div>
+          <div class="account-actions">
+            <button type="button" class="secondary-btn teacher-link-btn" id="openTeacherRequestBtn">Create teacher account</button>
+          </div>
+
+          <div class="portal-switcher">
+            <a href="admin.html" class="portal-option admin-option">
+              <span class="portal-badge">Staff access</span>
+              <strong>Admin login</strong>
+              <small>Manage teachers, online classes, permissions and reports.</small>
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="session-modal hidden" id="teacherRequestModal" aria-modal="true" role="dialog" aria-labelledby="teacherRequestTitle">
+      <div class="session-modal-card request-card">
+        <div class="session-modal-head">
+          <div>
+            <p class="eyebrow">Teacher registration</p>
+            <h2 id="teacherRequestTitle">Request a teacher account</h2>
+          </div>
+          <button type="button" class="close-modal" id="closeTeacherRequestBtn" aria-label="Close teacher request form">×</button>
+        </div>
+        <form id="teacherRequestForm" class="request-form">
+          <div class="request-form-grid">
+            <label>
+              <span>Full name</span>
+              <input type="text" name="teacherName" placeholder="Jane Doe" required />
+            </label>
+            <label>
+              <span>Email</span>
+              <input type="email" name="teacherEmail" placeholder="teacher@email.com" required />
+            </label>
+            <label>
+              <span>Set password</span>
+              <input type="password" name="teacherPassword" minlength="6" placeholder="At least 6 characters" required />
+            </label>
+            <label>
+              <span>Subject taught</span>
+              <select name="teacherSubject" required>
+                <option value="">Select your subject</option>
+                <option value="Maths">Maths</option>
+                <option value="English">English</option>
+                <option value="Kiswahili">Kiswahili</option>
+                <option value="History">History</option>
+                <option value="Computer">Computer</option>
+                <option value="Geography">Geography</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Biology">Biology</option>
+                <option value="Physics">Physics</option>
+                <option value="Business">Business</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Aviation">Aviation</option>
+              </select>
+            </label>
+          </div>
+          <button type="submit" class="primary-btn wide-btn">Submit for admin approval</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="teacherApprovalNotice" class="status-banner hidden"></div>
+
+    <div class="dashboard hidden" id="teacherDashboard">
+      <aside class="sidebar">
+        <div class="logo-wrap">
+          <div class="brand-mark"><img src="assets/somavanza-logo.jpg" alt="Somavanza logo" class="brand-logo"></div>
+          <div>
+            <p>Somavanza</p>
+            <span>Campus</span>
+          </div>
+        </div>
+        <nav class="nav-menu">
+          <a class="active" href="#teacherOverview" data-target="teacherOverview">Overview</a>
+          <a href="#teacherLessonFormSection" data-target="teacherLessonFormSection">My classes</a>
+          <a href="#teacherAssignmentsSection" data-target="teacherAssignmentsSection">Assignments</a>
+          <a href="#teacherMaterialsSection" data-target="teacherMaterialsSection">Materials</a>
+        </nav>
+      </aside>
+
+      <main class="content-panel">
+        <header class="topbar">
+          <div>
+            <p class="greeting" id="teacherGreetingText">Good morning</p>
+            <h1>Teacher dashboard</h1>
+          </div>
+          <div class="top-actions">
+            <button class="primary-btn" id="teacherLogoutBtn">Log out</button>
+          </div>
+        </header>
+
+        <section class="stats-grid" id="teacherOverview">
+          <article class="stat-card gradient-one">
+            <span>Classes active</span>
+            <strong>8</strong>
+            <small>2 new this week</small>
+          </article>
+          <article class="stat-card gradient-two">
+            <span>Students</span>
+            <strong>240</strong>
+            <small>18 absent</small>
+          </article>
+          <article class="stat-card gradient-three">
+            <span>Assignments</span>
+            <strong>14</strong>
+            <small>5 pending review</small>
+          </article>
+          <article class="stat-card gradient-four">
+            <span>Average class score</span>
+            <strong>86%</strong>
+            <small>Above target</small>
+          </article>
+        </section>
+
+        <section class="panel-box attendance-panel" style="margin-bottom: 18px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Overview</p>
+              <h2>Attendance</h2>
+            </div>
+            <span class="tag">Live</span>
+          </div>
+
+          <div class="attendance-ring-wrap">
+            <div class="attendance-ring">
+              <div class="ring-center">94%</div>
+            </div>
+            <div class="mini-kpi-list">
+              <div>
+                <strong>232</strong>
+                <span>Present</span>
+              </div>
+              <div>
+                <strong>18</strong>
+                <span>Absent</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-box" id="teacherLessonFormSection" style="margin: 18px 0 14px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Your assigned classes</p>
+              <h2>Classes to join</h2>
+            </div>
+            <span class="tag">Scheduled by admin</span>
+          </div>
+          <div class="resource-list" id="teacherScheduledLessons"></div>
+        </section>
+
+        <section class="lower-grid">
+          <article class="panel-box">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Schedule</p>
+                <h2>Today's classes</h2>
+              </div>
+              <span class="tag">Live</span>
+            </div>
+
+            <div class="class-list" id="teacherTodayClasses"></div>
+          </article>
+
+          <article class="panel-box">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Students</p>
+                <h2>Class snapshot</h2>
+              </div>
+              <span class="tag">Top performers</span>
+            </div>
+
+            <ul class="student-list">
+              <li><span>Aisha W.</span><strong>92%</strong></li>
+              <li><span>Brian K.</span><strong>89%</strong></li>
+              <li><span>Mary N.</span><strong>88%</strong></li>
+              <li><span>James O.</span><strong>84%</strong></li>
+            </ul>
+          </article>
+        </section>
+
+        <section class="panel-box" style="margin-top: 10px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Reports</p>
+              <h2>Performance overview</h2>
+            </div>
+            <span class="tag">Updated today</span>
+          </div>
+
+          <div class="report-list">
+            <div class="report-item">
+              <div class="report-meta">
+                <strong>Mathematics · Form 4</strong>
+                <small>Average score: 88%</small>
+              </div>
+              <span class="report-score">Strong</span>
+            </div>
+
+            <div class="report-item">
+              <div class="report-meta">
+                <strong>English · Form 3</strong>
+                <small>Writing completion: 76%</small>
+              </div>
+              <span class="report-score">Steady</span>
+            </div>
+
+            <div class="report-item">
+              <div class="report-meta">
+                <strong>Chemistry · Grade 10</strong>
+                <small>Practical tasks pending: 3</small>
+              </div>
+              <span class="report-score">Monitor</span>
+            </div>
+
+            <div class="report-item">
+              <div class="report-meta">
+                <strong>Biology · Grade 10</strong>
+                <small>Support needed: 5 students</small>
+              </div>
+              <span class="report-score">Follow-up</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-box" id="teacherAssignmentsSection" style="margin-top: 18px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Assignments</p>
+              <h2>Create and review homework</h2>
+            </div>
+            <span class="tag" id="teacherHomeworkCount">0 homework</span>
+          </div>
+
+          <form id="teacherHomeworkForm" class="upload-form">
+            <div class="form-grid">
+              <label>
+                Subject
+                <input type="text" name="subject" value="Assigned subject" readonly required />
+              </label>
+              <label>
+                Homework title
+                <input type="text" name="title" maxlength="120" placeholder="Example: Linear equations practice" required />
+              </label>
+              <label>
+                Google Classroom link
+                <input type="url" name="classroomUrl" placeholder="https://classroom.google.com/..." required />
+              </label>
+              <label>
+                Instructions
+                <textarea name="instructions" rows="3" maxlength="1000" placeholder="What should students complete?" required></textarea>
+              </label>
+            </div>
+            <p class="homework-rule">24-hour deadline · up to 6 early points, decreasing by 1 point each hour; no bonus after 6 hours.</p>
+            <div class="form-actions">
+              <button class="primary-btn" type="submit">Create homework</button>
+            </div>
+          </form>
+
+          <div class="assignment-list" id="teacherHomeworkList"></div>
+        </section>
+
+        <section class="summary-grid" style="margin-top: 18px;">
+          <article class="summary-card">
+            <h3>Weekly uploads</h3>
+            <p>Post notes, worksheets, recorded lessons, and revision material for your classes.</p>
+            <span class="grade-pill">12 this term</span>
+          </article>
+          <article class="summary-card">
+            <h3>Progress focus</h3>
+            <p>Follow assessment completion, class participation, and students who need follow-up support.</p>
+            <span class="grade-pill">Live insights</span>
+          </article>
+        </section>
+
+        <section class="panel-box" id="teacherMaterialsSection" style="margin-top: 22px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Materials</p>
+              <h2>Upload learning resources</h2>
+            </div>
+            <span class="tag">2 sections</span>
+          </div>
+
+          <div class="materials-grid">
+            <div class="sub-panel">
+              <div class="panel-header" style="margin-bottom: 12px;">
+                <div>
+                  <p class="eyebrow">Notes</p>
+                  <h2>Note upload</h2>
+                </div>
+              </div>
+
+              <form id="teacherUploadForm" class="upload-form">
+                <div class="form-grid">
+                  <label>
+                    Subject
+                    <input type="text" name="subject" value="Assigned subject" readonly required />
+                  </label>
+
+                  <label>
+                    Topic
+                    <input type="text" name="title" placeholder="Example: Silent Song analysis notes" required />
+                  </label>
+
+                  <label>
+                    Note type
+                    <select name="type" required>
+                      <option value="PDF Notes">PDF Notes</option>
+                      <option value="Lesson notes">Lesson notes</option>
+                      <option value="Worksheet">Worksheet</option>
+                    </select>
+                  </label>
+
+                  <label>
+                    Teacher
+                    <input type="text" name="teacher" value="Teacher" readonly required />
+                  </label>
+
+                  <label>
+                    Upload note file
+                    <input type="file" name="noteFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" required />
+                  </label>
+
+                  <label>
+                    Date
+                    <input type="date" name="date" id="noteDateField" required />
+                  </label>
+                </div>
+
+                <div class="form-actions">
+                  <button class="primary-btn" type="submit">Upload notes</button>
+                </div>
+              </form>
+
+              <div class="resource-list" id="noteUploadList">
+                <div class="resource-item-box" data-subject="English">
+                  <div>
+                    <strong>Essay writing guide</strong>
+                    <small>English · PDF Notes</small>
+                  </div>
+                  <span class="resource-pill">PDF</span>
+                </div>
+                <div class="resource-item-box" data-subject="Biology">
+                  <div>
+                    <strong>Genetics summary</strong>
+                    <small>Biology · Worksheet</small>
+                  </div>
+                  <span class="resource-pill">DOC</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="sub-panel">
+              <div class="panel-header" style="margin-bottom: 12px;">
+                <div>
+                  <p class="eyebrow">Video</p>
+                  <h2>Video upload</h2>
+                </div>
+              </div>
+
+              <form id="teacherVideoUploadForm" class="upload-form">
+                <div class="form-grid">
+                  <label>
+                    Subject
+                    <input type="text" name="videoSubject" value="Assigned subject" readonly required />
+                  </label>
+
+                  <label>
+                    Video title
+                    <input type="text" name="videoTitle" placeholder="Example: Algebra revision lesson" required />
+                  </label>
+
+                  <label>
+                    Video type
+                    <select name="videoType" required>
+                      <option value="Recorded lesson">Recorded lesson</option>
+                      <option value="Tutorial">Tutorial</option>
+                      <option value="Revision">Revision</option>
+                    </select>
+                  </label>
+
+                  <label>
+                    Teacher
+                    <input type="text" name="videoTeacher" value="Teacher" readonly required />
+                  </label>
+
+                  <label>
+                    Video link
+                    <input type="url" name="videoLink" placeholder="https://youtube.com/watch?... or recorded lesson link" />
+                  </label>
+
+                  <label>
+                    Upload video file
+                    <input type="file" name="videoFile" accept="video/*" />
+                  </label>
+
+                  <label>
+                    Date
+                    <input type="date" name="videoDate" id="videoDateField" required />
+                  </label>
+                </div>
+
+                <div class="form-actions">
+                  <button class="primary-btn" type="submit">Upload video</button>
+                </div>
+              </form>
+
+              <div class="resource-list" id="videoUploadList">
+                <div class="resource-item-box" data-subject="Maths">
+                  <div>
+                    <strong>Algebra revision</strong>
+                    <small>Mathematics · Recorded lesson</small>
+                  </div>
+                  <span class="resource-pill">Video</span>
+                </div>
+                <div class="resource-item-box" data-subject="Biology">
+                  <div>
+                    <strong>Cells tutorial</strong>
+                    <small>Biology · Tutorial</small>
+                  </div>
+                  <span class="resource-pill">Video</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-box" style="margin-top: 22px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Recent uploads</p>
+              <h2>Content already shared</h2>
+            </div>
+            <span class="tag">Updated today</span>
+          </div>
+
+          <div id="teacherUploadList" class="upload-list">
+            <article class="upload-item" data-subject="English">
+              <div>
+                <span class="upload-badge">English</span>
+                <h3>Essay writing guide on a Silent Song</h3>
+              </div>
+              <div class="upload-meta">
+                <small>PDF Notes</small>
+                <small>Ms. Achieng</small>
+              </div>
+            </article>
+
+            <article class="upload-item" data-subject="Biology">
+              <div>
+                <span class="upload-badge">Biology</span>
+                <h3>Biology Notes for Genetics</h3>
+              </div>
+              <div class="upload-meta">
+                <small>Teacher PDF</small>
+                <small>Dr. Muli</small>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="grade-modal hidden" id="gradeModal" aria-hidden="true">
+      <div class="grade-modal-content">
+        <div class="panel-header" style="margin-bottom: 0;">
+          <div>
+            <p class="eyebrow">Grade</p>
+            <h2 id="gradeModalTitle">Assignment</h2>
+          </div>
+          <button class="ghost-btn tiny-btn" type="button" data-close-grade>Close</button>
+        </div>
+
+        <label>
+          Base score before early bonus (%)
+          <input id="gradeInput" type="number" min="0" max="100" step="1" placeholder="Enter percentage" />
+        </label>
+
+        <div class="grade-result-box" id="gradeResultBox">Grade will appear here</div>
+
+        <div class="grade-modal-actions">
+          <button class="secondary-btn tiny-btn" type="button" data-close-grade>Cancel</button>
+          <button class="primary-btn tiny-btn" type="button" id="saveGradeBtn">Save grade</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

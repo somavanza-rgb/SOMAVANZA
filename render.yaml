@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: somavanza
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_SSL
+        value: "true"
+      - key: SESSION_SECRET
+        sync: false
+      - key: BOOTSTRAP_ADMIN_EMAIL
+        value: somavanza@gmail.com
+      - key: BOOTSTRAP_ADMIN_PASSWORD
+        sync: false
+      - key: BOOTSTRAP_ADMIN_NAME
+        value: Somavanza Admin

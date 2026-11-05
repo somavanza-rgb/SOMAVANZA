@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Somavanza | Materials</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+<link rel="manifest" href="assets/favicon/site.webmanifest"></head>
+  <body data-page="nav">
+    <div class="dashboard">
+      <aside class="sidebar">
+        <div class="logo-wrap">
+          <div class="brand-mark"><img src="assets/somavanza-logo.jpg" alt="Somavanza logo" class="brand-logo"></div>
+          <div>
+            <p>Somavanza</p>
+            <span>Campus</span>
+          </div>
+        </div>
+        <nav class="nav-menu">
+          <a href="dashboard.html">Overview</a>
+          <a href="my-classes.html">My classes</a>
+          <a href="subjects.html">Subjects</a>
+          <a href="progress.html">Progress</a>
+          <a class="active" href="materials.html">Materials</a>
+          <a href="assessment.html">Assessment</a>
+        </nav>
+      </aside>
+      <main class="content-panel">
+        <header class="topbar">
+          <div>
+            <p class="greeting">Resources</p>
+            <h1>Study materials</h1>
+          </div>
+          <div class="top-actions">
+            <button class="ghost-btn" onclick="window.location.href='dashboard.html'">Dashboard</button>
+            <button class="primary-btn" id="logoutBtn">Log out</button>
+          </div>
+        </header>
+
+        <section class="summary-grid">
+          <article class="summary-card">
+            <h3>Teacher notes</h3>
+            <p>All materials below are uploaded by your teachers and contain the official lesson notes, PDFs, and references for the week.</p>
+            <span class="grade-pill">Official classroom resources</span>
+          </article>
+          <article class="summary-card">
+            <h3>Missed a lesson?</h3>
+            <p>Watch the recorded Google Meet lesson to catch up on what was taught before your next class or assessment.</p>
+            <span class="grade-pill">Recorded catch-up</span>
+          </article>
+        </section>
+
+        <section class="panel-box" style="margin-top: 22px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Teacher uploads</p>
+              <h2>Notes and PDFs</h2>
+            </div>
+            <span class="tag">Uploaded by teachers</span>
+          </div>
+
+          <div class="materials-toolbar">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="English">English</button>
+            <button class="filter-chip" data-filter="Biology">Biology</button>
+            <button class="filter-chip" data-filter="Notes">Notes</button>
+          </div>
+
+          <div id="materialsGrid" class="materials-grid"></div>
+        </section>
+
+        <section class="panel-box" style="margin-top: 22px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Catch-up</p>
+              <h2>Missed a lesson?</h2>
+            </div>
+            <span class="tag">Google Meet recordings</span>
+          </div>
+          <div id="missedLessonsGrid" class="materials-grid"></div>
+        </section>
+      </main>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

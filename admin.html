@@ -1,0 +1,555 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Somavanza | Admin Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; min-height: 100%; height: 100%; }
+      body { font-family: Inter, Arial, sans-serif; overflow: hidden; }
+      .page-shell { height: 100vh; min-height: 100vh; padding: 0; }
+      .auth-screen {
+        min-height: 100vh; height: 100vh; overflow: auto;
+        display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+        align-items: stretch; gap: clamp(20px, 4vw, 56px);
+        padding: clamp(18px, 3vw, 42px);
+      }
+      .brand-panel, .auth-card { min-width: 0; }
+      .brand-panel { display:flex; flex-direction:column; justify-content:space-between; gap:24px; }
+      .hero-copy { max-width: 620px; }
+      .hero-copy h1 { font-size: clamp(1.8rem, 3vw, 3.1rem); line-height:1.12; margin:12px 0; }
+      .hero-copy p { line-height:1.55; }
+      .feature-list { display:flex; flex-wrap:wrap; gap:24px; }
+      .auth-card { align-self:center; width:100%; max-width:470px; justify-self:center; padding:clamp(20px, 3vw, 34px); }
+      .auth-card form { display:grid; gap:14px; }
+      .auth-card input:not([type=checkbox]) { width:100%; min-width:0; }
+      .dashboard {
+        width:100vw; max-width:100vw; height:100vh; min-height:100vh; overflow:hidden;
+        display:grid; grid-template-columns:220px minmax(0,1fr);
+        margin:0;
+      }
+      .dashboard.hidden { display:none !important; }
+      .sidebar {
+        height:100vh; overflow-y:auto; position:sticky; top:0; padding:18px 14px;
+        align-self:stretch; border-right:1px solid rgba(255,255,255,0.08);
+      }
+      .nav-menu { display:flex; flex-direction:column; gap:6px; }
+      .nav-menu a { padding:10px 12px; border-radius:10px; }
+      .content-panel {
+        min-width:0; height:100vh; overflow-y:auto; padding:20px clamp(16px, 2.2vw, 30px);
+        scrollbar-width: thin; scroll-behavior:smooth;
+      }
+      .topbar { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:16px; }
+      .topbar h1 { font-size:clamp(1.35rem, 2vw, 2rem); margin:4px 0; }
+      .stats-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:14px; }
+      .stat-card { padding:14px; min-width:0; }
+      .stat-card strong { display:block; font-size:clamp(1.35rem, 2vw, 1.9rem); margin:5px 0; }
+      .panel-box { min-width:0; padding:16px; margin-bottom:14px; }
+      .panel-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+      .panel-header h2 { font-size:1.05rem; margin:3px 0; }
+      .form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+      .upload-form label { min-width:0; }
+      .upload-form input, .upload-form select, .upload-form textarea { width:100%; min-width:0; }
+      .form-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+      .teacher-list, .class-list, .approval-list { display:grid; gap:10px; }
+      .list-item { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 14px; border-radius:12px; background: rgba(255,255,255,0.04); border:1px solid rgba(158, 170, 208, 0.22); }
+      .list-item strong { display:block; margin-bottom:4px; }
+      .list-actions { display:flex; align-items:center; gap:8px; }
+      .tiny-btn { padding:7px 10px; border-radius:10px; font-size:0.72rem; }
+      .delete-btn { background: rgba(239, 68, 68, 0.12); color:#ef4444; border:1px solid rgba(239, 68, 68, 0.2); }
+      .delete-btn:hover { background: rgba(239, 68, 68, 0.18); }
+      .approval-item { display:grid; gap:8px; padding:12px 14px; border-radius:12px; background: rgba(255,255,255,0.03); border:1px solid rgba(158, 170, 208, 0.18); }
+      .approval-meta { display:flex; flex-wrap:wrap; gap:6px; color:#c9d9ff; font-size:0.78rem; }
+      .approval-item button { justify-self:flex-start; }
+      .admin-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+      .mini-panel { padding:14px; border-radius:12px; background: rgba(255,255,255,0.03); border:1px solid rgba(158, 170, 208, 0.18); }
+      .mini-panel h3 { margin:10px 0 6px; font-size:1rem; }
+      .mini-panel p { margin:0; color:#c9d9ff; }
+      .tag { display:inline-flex; align-items:center; justify-content:center; padding:6px 10px; border-radius:999px; font-size:0.7rem; font-weight:700; }
+      .toolbar { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:14px; }
+      .toolbar-actions { display:flex; gap:8px; flex-wrap:wrap; }
+      .ghost-btn { background: rgba(91, 99, 255, 0.08); color:#dfe7ff; border:1px solid rgba(158, 170, 208, 0.2); }
+      .table-card { overflow:hidden; border-radius:16px; background: rgba(255,255,255,0.03); border:1px solid rgba(158, 170, 208, 0.16); }
+      .timetable-table-wrap { overflow-x:auto; }
+      .timetable-table { min-width:1000px; table-layout:fixed; }
+      .timetable-table th, .timetable-table td { vertical-align:top; }
+      .timetable-table td strong, .timetable-table td small { display:block; margin-bottom:6px; overflow-wrap:anywhere; }
+      .timetable-empty { color:#a9b9dd; }
+      table { width:100%; border-collapse:collapse; }
+      th, td { padding:12px 14px; text-align:left; border-bottom:1px solid rgba(158, 170, 208, 0.12); }
+      th { font-size:0.74rem; letter-spacing:0.08em; text-transform:uppercase; color:#a9b9dd; }
+      tbody tr:hover { background: rgba(255,255,255,0.02); }
+      .status-pill { display:inline-flex; align-items:center; padding:6px 10px; border-radius:999px; font-size:0.7rem; font-weight:700; }
+      .status-good { color:#a7f3d0; background: rgba(16,185,129,0.12); }
+      .status-warn { color:#f9d48f; background: rgba(245,158,11,0.12); }
+      .status-urgent { color:#fca5a5; background: rgba(239,68,68,0.12); }
+      .quick-actions { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:18px; }
+      .quick-actions .mini-panel { min-height:120px; }
+      .report-bars { display:grid; gap:10px; margin-top:12px; }
+      .bar-row { display:grid; grid-template-columns: 130px 1fr 40px; gap:12px; align-items:center; }
+      .bar-track { height:10px; border-radius:999px; background: rgba(255,255,255,0.05); overflow:hidden; }
+      .bar-fill { display:block; height:100%; border-radius:inherit; background: linear-gradient(90deg, #5b63ff, #73c7ff); }
+      @media (max-width: 1000px) {
+        .dashboard { grid-template-columns:180px minmax(0,1fr); }
+        .stats-grid, .admin-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      }
+      @media (max-width: 700px) {
+        .auth-screen { height:auto; min-height:100vh; grid-template-columns:1fr; gap:22px; padding:18px; }
+        .brand-panel { gap:18px; }
+        .feature-list { gap:18px; }
+        .auth-card { max-width:none; }
+        .dashboard { height:auto; min-height:100vh; display:flex; flex-direction:column; overflow:visible; }
+        .sidebar { height:auto; position:static; overflow:visible; }
+        .nav-menu { flex-direction:row; overflow-x:auto; padding-bottom:4px; }
+        .nav-menu a { white-space:nowrap; }
+        .content-panel { height:auto; overflow:visible; padding:16px; }
+        .topbar { align-items:flex-start; }
+        .stats-grid, .admin-grid, .form-grid { grid-template-columns:1fr; }
+      }
+    </style>
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+<link rel="manifest" href="assets/favicon/site.webmanifest"></head>
+  <body data-page="admin">
+    <div class="page-shell">
+      <section class="auth-screen" id="adminAuthScreen">
+        <div class="brand-panel">
+          <div class="brand-row">
+            <div class="brand-mark"><img src="assets/somavanza-logo.jpg" alt="Somavanza logo" class="brand-logo"></div>
+            <div>
+              <p class="eyebrow">Somavanza</p>
+              <h2>Admin portal</h2>
+            </div>
+          </div>
+
+          <div class="hero-copy">
+            <span class="pill">School operations</span>
+            <h1>Manage classes, teachers, approvals, and reports from one place.</h1>
+            <p>
+              Monitor school performance, approve student access, assign teachers,
+              and keep classroom operations running smoothly.
+            </p>
+          </div>
+
+          <div class="feature-list">
+            <div>
+              <strong>34</strong>
+              <span>Teachers</span>
+            </div>
+            <div>
+              <strong>12</strong>
+              <span>Classes</span>
+            </div>
+            <div>
+              <strong>96%</strong>
+              <span>System health</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="auth-card">
+          <div class="login-header">
+            <p>Secure access</p>
+            <h3>Admin login</h3>
+          </div>
+
+          <form id="adminLoginForm">
+            <label>
+              <span>Email address</span>
+              <input type="email" id="adminEmail" placeholder="somavanza@gmail.com" required />
+            </label>
+
+            <label>
+              <span>Password</span>
+              <input type="password" id="adminPassword" placeholder="••••••••" required />
+            </label>
+
+            <button type="submit" class="primary-btn">Login to admin dashboard</button>
+          </form>
+
+          <div class="account-actions">
+            <a href="teacher.html" class="secondary-btn teacher-link-btn">Teacher portal</a>
+            <a href="index.html" class="secondary-btn teacher-link-btn">Student portal</a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="dashboard hidden" id="adminDashboard">
+      <aside class="sidebar">
+        <div class="logo-wrap">
+          <div class="brand-mark"><img src="assets/somavanza-logo.jpg" alt="Somavanza logo" class="brand-logo"></div>
+          <div>
+            <p>Somavanza</p>
+            <span>Admin</span>
+          </div>
+        </div>
+
+        <nav class="nav-menu">
+          <a class="active" href="#adminOverview" data-target="adminOverview">Overview</a>
+          <a href="#adminTeachersSection" data-target="adminTeachersSection">Teachers</a>
+          <a href="#adminClassesSection" data-target="adminClassesSection">Classes</a>
+          <a href="#adminTimetableSection" data-target="adminTimetableSection">Timetable</a>
+          <a href="#adminApprovalsSection" data-target="adminApprovalsSection">Approvals</a>
+          <a href="#adminReportsSection" data-target="adminReportsSection">Reports</a>
+        </nav>
+      </aside>
+
+      <main class="content-panel">
+        <header class="topbar">
+          <div>
+            <p class="greeting" id="adminGreetingText">Good morning</p>
+            <h1>Admin dashboard</h1>
+          </div>
+          <div class="top-actions">
+            <button class="primary-btn" id="adminLogoutBtn">Log out</button>
+          </div>
+        </header>
+
+        <section class="stats-grid" id="adminOverview">
+          <article class="stat-card gradient-one">
+            <span>Total teachers</span>
+            <strong id="adminTeacherCount">0</strong>
+            <small id="adminTeacherMeta">Current staff roster</small>
+          </article>
+          <article class="stat-card gradient-two">
+            <span>Active classes</span>
+            <strong id="adminClassCount">0</strong>
+            <small id="adminClassMeta">Live online sessions</small>
+          </article>
+          <article class="stat-card gradient-three">
+            <span>Students enrolled</span>
+            <strong id="adminStudentCount">0</strong>
+            <small id="adminStudentMeta">Approved student accounts</small>
+          </article>
+          <article class="stat-card gradient-four">
+            <span>Pending requests</span>
+            <strong id="adminRequestCount">0</strong>
+            <small id="adminRequestMeta">Awaiting approval</small>
+          </article>
+          <article class="stat-card gradient-one">
+            <span>Attendance</span>
+            <strong id="adminAttendanceScore">0%</strong>
+            <small id="adminAttendanceMeta">Class participation</small>
+          </article>
+          <article class="stat-card gradient-two">
+            <span>New enrolments</span>
+            <strong id="adminNewEnrollments">0</strong>
+            <small id="adminEnrollmentMeta">This month</small>
+          </article>
+          <article class="stat-card gradient-three">
+            <span>Assignment completion</span>
+            <strong id="adminAssignmentScore">0%</strong>
+            <small id="adminAssignmentMeta">On-time submissions</small>
+          </article>
+          <article class="stat-card gradient-four">
+            <span>School performance</span>
+            <strong id="adminPerformanceScore">0%</strong>
+            <small id="adminPerformanceMeta">Average class trend</small>
+          </article>
+        </section>
+
+        <section class="quick-actions">
+          <div class="mini-panel">
+            <span class="eyebrow">Quick action</span>
+            <h3>Add teacher</h3>
+            <p>Create a new staff member and assign access.</p>
+          </div>
+          <div class="mini-panel">
+            <span class="eyebrow">Quick action</span>
+            <h3>New class</h3>
+            <p>Launch a new class, room, and timetable entry.</p>
+          </div>
+          <div class="mini-panel">
+            <span class="eyebrow">Quick action</span>
+            <h3>Review requests</h3>
+            <p>Review student and teacher account requests.</p>
+          </div>
+          <div class="mini-panel">
+            <span class="eyebrow">Quick action</span>
+            <h3>Daily report</h3>
+            <p>Review performance and operational health.</p>
+          </div>
+        </section>
+
+        <section class="panel-box" id="adminTeachersSection" style="margin-bottom: 18px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Staff</p>
+              <h2>Teacher management</h2>
+            </div>
+            <div class="toolbar-actions">
+              <span class="tag">Live roster</span>
+            </div>
+          </div>
+
+          <form id="adminTeacherForm" class="upload-form">
+            <div class="form-grid">
+              <label>
+                Teacher name
+                <input type="text" name="teacherName" placeholder="Jane Wanjiku" required />
+              </label>
+
+              <label>
+                Email
+                <input type="email" name="teacherEmail" placeholder="teacher@Somavanza.com" required />
+              </label>
+
+              <label>
+                Password
+                <input type="text" name="teacherPassword" placeholder="Create password" required />
+              </label>
+
+              <label>
+                Role
+                <select name="teacherRole" required>
+                  <option value="Teacher">Teacher</option>
+                  <option value="Head teacher">Head teacher</option>
+                  <option value="Coordinator">Coordinator</option>
+                </select>
+              </label>
+
+              <label>
+                Subject taught
+                <select name="teacherSubject" required>
+                  <option value="Maths">Maths</option>
+                  <option value="English">English</option>
+                  <option value="Kiswahili">Kiswahili</option>
+                  <option value="History">History</option>
+                  <option value="Computer">Computer</option>
+                  <option value="Geography">Geography</option>
+                  <option value="Chemistry">Chemistry</option>
+                  <option value="Biology">Biology</option>
+                  <option value="Physics">Physics</option>
+                  <option value="Business">Business</option>
+                  <option value="Electronics">Electronics</option>
+                  <option value="Aviation">Aviation</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button class="primary-btn" type="submit">Add teacher</button>
+            </div>
+          </form>
+
+          <div class="table-card" style="margin-top: 16px;">
+            <div id="adminTeacherList"></div>
+          </div>
+        </section>
+
+        <section class="panel-box" id="adminClassesSection" style="margin-bottom: 18px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Classes</p>
+              <h2>Class management</h2>
+            </div>
+            <span class="tag">Schedule</span>
+          </div>
+
+          <form id="adminClassForm" class="upload-form">
+            <div class="form-grid">
+              <label>
+                Subject
+                <select name="classSubject" required>
+                  <option value="Maths">Maths</option>
+                  <option value="English">English</option>
+                  <option value="Kiswahili">Kiswahili</option>
+                  <option value="History">History</option>
+                  <option value="Computer">Computer</option>
+                  <option value="Geography">Geography</option>
+                  <option value="Chemistry">Chemistry</option>
+                  <option value="Biology">Biology</option>
+                  <option value="Physics">Physics</option>
+                  <option value="Business">Business</option>
+                  <option value="Electronics">Electronics</option>
+                  <option value="Aviation">Aviation</option>
+                </select>
+              </label>
+
+              <label>
+                Class name
+                <select name="className" required>
+                  <option value="Form 3">Form 3</option>
+                  <option value="Form 4">Form 4</option>
+                  <option value="Grade 10">Grade 10</option>
+                </select>
+              </label>
+
+              <label>
+                Teacher
+                <select name="classTeacher" id="classTeacherSelect" required></select>
+              </label>
+
+              <label>
+                Day
+                <select name="classDay" required>
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thursday">Thursday</option>
+                  <option value="Friday">Friday</option>
+                </select>
+              </label>
+
+              <label>
+                Time slot
+                <select name="classSlot" required>
+                  <option value="08:00">8:00–9:30 AM</option>
+                  <option value="10:00">10:00–11:30 AM</option>
+                  <option value="12:00">12:00–1:30 PM</option>
+                </select>
+              </label>
+
+              <label style="grid-column: 1 / -1;">
+                Google Meet link
+                <input type="url" name="classLink" placeholder="https://meet.google.com/..." required />
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button class="primary-btn" type="submit">Create and publish class</button>
+            </div>
+          </form>
+
+          <div class="table-card" style="margin-top: 16px;">
+            <div id="adminClassList"></div>
+          </div>
+        </section>
+
+        <section class="panel-box" id="adminTimetableSection" style="margin-bottom: 18px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Weekly schedule</p>
+              <h2>School timetable</h2>
+            </div>
+            <span class="tag">3 lessons daily · 30-minute breaks</span>
+          </div>
+          <p>Admins create and assign classes here. Teachers and students see published classes immediately. Each lesson is 90 minutes; available slots are 8:00–9:30 AM, 10:00–11:30 AM, and 12:00–1:30 PM, Monday to Friday.</p>
+          <div class="form-actions">
+            <button class="primary-btn" type="button" id="generateTimetableBtn">Generate timetable</button>
+            <button class="ghost-btn" type="button" id="downloadTimetableBtn" disabled>Download timetable image</button>
+            <button class="ghost-btn" type="button" id="refreshTimetableBtn">Refresh for a new week</button>
+          </div>
+          <div id="adminTimetablePreview" style="margin-top: 16px;" aria-live="polite">
+            <div class="approval-item"><strong>No timetable generated yet</strong><small>Generate the timetable to preview teacher-published lessons and download it as an image for sharing.</small></div>
+          </div>
+        </section>
+
+        <section class="panel-box" id="adminApprovalsSection" style="margin-bottom: 18px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Approvals</p>
+              <h2>Student account requests</h2>
+            </div>
+            <span class="tag">Pending</span>
+          </div>
+
+          <div id="adminReviewList" class="approval-list"></div>
+          <div class="panel-header" style="margin-top: 20px;">
+            <div>
+              <p class="eyebrow">Staff applications</p>
+              <h2>Teacher account requests</h2>
+            </div>
+            <span class="tag">Pending</span>
+          </div>
+          <div id="adminTeacherReviewList" class="approval-list"></div>
+        </section>
+
+        <section class="panel-box" style="margin-bottom: 18px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Notifications</p>
+              <h2>Recent actions</h2>
+            </div>
+            <span class="tag">Live</span>
+          </div>
+
+          <div id="adminNotificationsList" class="approval-list"></div>
+        </section>
+
+        <section class="panel-box" id="adminReportsSection">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Reports</p>
+              <h2>Operational overview</h2>
+            </div>
+            <span class="tag">Updated today</span>
+          </div>
+
+          <div class="toolbar-actions" style="margin-bottom: 16px;">
+            <button class="primary-btn" type="button" id="generateHolidayReportBtn">Create holiday report</button>
+          </div>
+
+          <div class="admin-grid">
+            <div class="mini-panel">
+              <span class="eyebrow">Attendance</span>
+              <h3>94.2%</h3>
+              <p>Average attendance across all classes.</p>
+            </div>
+
+            <div class="mini-panel">
+              <span class="eyebrow">Assignments</span>
+              <h3>82% on time</h3>
+              <p>Most student submissions are within the deadline.</p>
+            </div>
+
+            <div class="mini-panel">
+              <span class="eyebrow">Teacher load</span>
+              <h3>6.5 classes</h3>
+              <p>Average number of active classes per teacher.</p>
+            </div>
+
+            <div class="mini-panel">
+              <span class="eyebrow">Support needs</span>
+              <h3>21 students</h3>
+              <p>Students flagged for intervention and follow-up.</p>
+            </div>
+          </div>
+
+          <form id="studentHolidayReportForm" class="upload-form" style="margin-top: 18px; border-top: 1px solid rgba(158,170,208,0.15); padding-top: 18px;">
+            <div class="form-grid">
+              <label>
+                Student
+                <select id="studentReportSelect" name="studentReportSelect" required></select>
+              </label>
+            </div>
+            <div class="form-actions">
+              <button class="primary-btn" type="submit">Send holiday summary report</button>
+            </div>
+          </form>
+
+          <div class="report-bars" style="margin-top: 16px;">
+            <div class="bar-row">
+              <span>Attendance</span>
+              <div class="bar-track"><span class="bar-fill" style="width: 94%;"></span></div>
+              <strong>94%</strong>
+            </div>
+            <div class="bar-row">
+              <span>Assignments</span>
+              <div class="bar-track"><span class="bar-fill" style="width: 82%;"></span></div>
+              <strong>82%</strong>
+            </div>
+            <div class="bar-row">
+              <span>Engagement</span>
+              <div class="bar-track"><span class="bar-fill" style="width: 88%;"></span></div>
+              <strong>88%</strong>
+            </div>
+          </div>
+
+          <div id="adminReportList" style="margin-top: 20px;"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

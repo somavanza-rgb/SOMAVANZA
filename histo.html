@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Somavanza | History</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+<link rel="manifest" href="assets/favicon/site.webmanifest"></head>
+  <body data-page="subject" data-subject="histo">
+    <div class="dashboard">
+      <aside class="sidebar">
+        <div class="logo-wrap">
+          <div class="brand-mark"><img src="assets/somavanza-logo.jpg" alt="Somavanza logo" class="brand-logo"></div>
+          <div>
+            <p>Somavanza</p>
+            <span>Campus</span>
+          </div>
+        </div>
+        <nav class="nav-menu">
+          <a href="dashboard.html">Overview</a>
+          <a href="my-classes.html">My classes</a>
+          <a class="active" href="subjects.html">Subjects</a>
+          <a href="progress.html">Progress</a>
+          <a href="materials.html">Materials</a>
+          <a href="assessment.html">Assessment</a>
+        </nav>
+      </aside>
+      <main class="content-panel">
+        <header class="topbar">
+          <div>
+            <p class="greeting">Subject view</p>
+            <h1>Course detail</h1>
+          </div>
+          <div class="top-actions">
+            <button class="ghost-btn" onclick="window.location.href='dashboard.html'">Back to dashboard</button>
+            <button class="primary-btn" id="logoutBtn">Log out</button>
+          </div>
+        </header>
+        <section class="subject-hero">
+          <div>
+            <p class="eyebrow">Current subject</p>
+            <h1 id="subjectPageTitle">History</h1>
+            <p id="subjectSummary">Exploring key historical eras, source analysis, and timeline-building strategies.</p>
+          </div>
+          <div class="subject-score-panel">
+            <span class="tag" id="subjectPageBadge">World History</span>
+            <strong id="subjectProgressValue">71%</strong>
+            <span id="subjectTeacher">Teacher: Mr. Otieno</span>
+            <span id="subjectNextClass">Next class: Today • 2:15 PM</span>
+          </div>
+        </section>
+        <section class="panel-box">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Topics</p>
+              <h2>Study roadmap</h2>
+            </div>
+            <span class="tag">Live support</span>
+          </div>
+          <ul class="resource-list" id="subjectTopics"></ul>
+        </section>
+      </main>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

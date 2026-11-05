@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Somavanza | Student Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+<link rel="manifest" href="assets/favicon/site.webmanifest"></head>
+  <body>
+    <div class="page-shell">
+      <section class="auth-screen" id="authScreen">
+        <div class="brand-panel">
+          <div class="brand-row">
+            <div class="brand-mark"><img src="assets/somavanza-logo.jpg" alt="Somavanza logo" class="brand-logo"></div>
+            <div>
+              <p class="eyebrow">Somavanza</p>
+              <h2>Online learning hub</h2>
+            </div>
+          </div>
+
+          <div class="hero-copy">
+            <span class="pill">Live classes</span>
+            <h1>Learn with expert tutors from anywhere.</h1>
+            <p>
+              Discover engaging lessons, track your progress, and join real-time classes
+              in maths, English, science, business, and more.
+            </p>
+          </div>
+
+          <div class="student-gallery" aria-label="Students in online classes">
+            <div class="gallery-photo large">
+              <img src="assets/students/student-1.jpg" alt="Student attending a live online class with headphones" />
+              <span class="gallery-tag live-dot">● Live now</span>
+            </div>
+            <div class="gallery-photo">
+              <img src="assets/students/student-2.jpg" alt="Students collaborating during an online study session" />
+              <span class="gallery-tag">Group study</span>
+            </div>
+            <div class="gallery-photo">
+              <img src="assets/students/student-3.jpg" alt="Students learning together in a virtual classroom" />
+              <span class="gallery-tag">Virtual class</span>
+            </div>
+            <div class="gallery-photo">
+              <img src="assets/students/student-4.jpg" alt="Student following a tutor-led online lesson" />
+              <span class="gallery-tag">1-on-1 tutoring</span>
+            </div>
+          </div>
+
+          <div class="feature-list">
+            <div>
+              <strong>12+</strong>
+              <span>Subjects</span>
+            </div>
+            <div>
+              <strong>4.9/5</strong>
+              <span>Student rating</span>
+            </div>
+            <div>
+              <strong>24/7</strong>
+              <span>Access</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="auth-card">
+          <div class="login-header">
+            <p>Welcome back</p>
+            <h3>Student login</h3>
+          </div>
+
+          <form id="loginForm">
+            <label>
+              <span>Email address</span>
+              <input type="email" id="email" placeholder="you@example.com" required />
+            </label>
+
+            <label>
+              <span>Password</span>
+              <input type="password" id="password" placeholder="••••••••" required />
+            </label>
+
+            <div class="remember-row">
+              <label class="checkbox-wrap">
+                <input type="checkbox" checked />
+                <span>Keep me signed in</span>
+              </label>
+              <a href="#">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="primary-btn">Login to dashboard</button>
+          </form>
+
+          <div class="account-actions">
+            <button type="button" class="secondary-btn" id="openRequestModalBtn">Sign up</button>
+            <a href="teacher.html" class="secondary-btn teacher-link-btn">Teacher login</a>
+          </div>
+
+          <div class="portal-switcher">
+            <a href="admin.html" class="portal-option admin-option">
+              <span class="portal-badge">Staff access</span>
+              <strong>Admin login</strong>
+              <small>Manage teachers, school classes, approvals and reports.</small>
+            </a>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <div class="session-modal hidden" id="accountRequestModal" aria-modal="true" role="dialog" aria-labelledby="requestAccountTitle">
+      <div class="session-modal-card request-card">
+        <div class="session-modal-head">
+          <div>
+            <p class="eyebrow">New student</p>
+            <h2 id="requestAccountTitle">Sign up</h2>
+          </div>
+          <button type="button" class="close-modal" id="closeRequestModalBtn" aria-label="Close account request modal">Ã—</button>
+        </div>
+
+        <form id="accountRequestForm" class="request-form">
+          <div class="request-form-grid">
+            <label>
+              <span>Full name</span>
+              <input type="text" name="studentName" placeholder="Jane Doe" required />
+            </label>
+            <label>
+              <span>Email</span>
+              <input type="email" name="email" placeholder="student@email.com" required />
+            </label>
+            <label>
+              <span>Set password</span>
+              <input type="password" name="password" placeholder="Create a password" required />
+            </label>
+            <label>
+              <span>Parent/guardian phone</span>
+              <input type="tel" name="phone" placeholder="0741 722 473" required />
+            </label>
+            <label>
+              <span>Grade / Form</span>
+              <input type="text" name="grade" placeholder="Enter any grade or form" required />
+            </label>
+            <label>
+              <span>M-Pesa reference</span>
+              <input type="text" name="mpesaRef" placeholder="QH12345" required />
+            </label>
+          </div>
+
+          <div class="session-summary">
+            <span>Payment</span>
+            <strong>Send payment to: 0741722473</strong>
+          </div>
+
+          <button type="submit" class="primary-btn wide-btn">Submit for approval</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="approvalNotice" class="status-banner hidden"></div>
+
+      <div class="dashboard hidden" id="dashboard">
+        <aside class="sidebar">
+          <div class="logo-wrap">
+            <div class="brand-mark"><img src="assets/somavanza-logo.jpg" alt="Somavanza logo" class="brand-logo"></div>
+            <div>
+              <p>Somavanza</p>
+              <span>Campus</span>
+            </div>
+          </div>
+
+          <nav class="nav-menu">
+            <a class="active" href="#">Overview</a>
+            <a href="#">My classes</a>
+            <a href="#">Subjects</a>
+            <a href="#">Progress</a>
+            <a href="#">Materials</a>
+            <a href="#">Assessment</a>
+          </nav>
+
+        </aside>
+
+        <main class="content-panel">
+          <header class="topbar">
+            <div>
+              <p class="greeting" id="greetingText">Good morning</p>
+              <h1>Learning dashboard</h1>
+            </div>
+
+            <div class="top-actions">
+              <button class="primary-btn" id="logoutBtn">Log out</button>
+            </div>
+          </header>
+
+          <section class="stats-grid">
+            <article class="stat-card gradient-one">
+              <span>Hours learned</span>
+              <strong>32.4h</strong>
+              <small>+8.2% this week</small>
+            </article>
+            <article class="stat-card gradient-two">
+              <span>Live classes</span>
+              <strong>12</strong>
+              <small>4 upcoming</small>
+            </article>
+            <article class="stat-card gradient-three">
+              <span>Assignments</span>
+              <strong>18</strong>
+              <small>6 pending</small>
+            </article>
+            <article class="stat-card gradient-four">
+              <span>Average score</span>
+              <strong>86%</strong>
+              <small>Top class rank</small>
+            </article>
+          </section>
+
+          <section class="panel-box subject-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Subjects</p>
+                <h2>Explore your courses</h2>
+              </div>
+              <a href="#">View all</a>
+            </div>
+
+            <div class="subject-grid" id="subjectGrid"></div>
+          </section>
+
+          <section class="lower-grid">
+            <article class="panel-box">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Schedule</p>
+                  <h2>Today's live classes</h2>
+                </div>
+                <span class="tag">12 lessons</span>
+              </div>
+
+              <div class="class-list">
+                <div class="class-item">
+                  <div class="class-meta">
+                    <span class="dot math">M</span>
+                    <div>
+                      <strong>Mathematics</strong>
+                      <small>Mr. Kamau · 9:00 AM</small>
+                    </div>
+                  </div>
+                  <button class="join-btn">Join</button>
+                </div>
+
+                <div class="class-item">
+                  <div class="class-meta">
+                    <span class="dot eng">E</span>
+                    <div>
+                      <strong>English</strong>
+                      <small>Ms. Achieng · 11:00 AM</small>
+                    </div>
+                  </div>
+                  <button class="join-btn">Join</button>
+                </div>
+
+                <div class="class-item">
+                  <div class="class-meta">
+                    <span class="dot sci">C</span>
+                    <div>
+                      <strong>Chemistry</strong>
+                      <small>Dr. Njuguna · 1:30 PM</small>
+                    </div>
+                  </div>
+                  <button class="join-btn">Join</button>
+                </div>
+
+                <div class="class-item">
+                  <div class="class-meta">
+                    <span class="dot bus">B</span>
+                    <div>
+                      <strong>Business</strong>
+                      <small>Mrs. Wairimu · 4:00 PM</small>
+                    </div>
+                  </div>
+                  <button class="join-btn">Join</button>
+                </div>
+              </div>
+            </article>
+
+            <article class="panel-box detail-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Focus area</p>
+                  <h2 id="detailTitle">Mathematics</h2>
+                </div>
+                <span class="tag" id="detailBadge">Beginner</span>
+              </div>
+
+              <div class="detail-body">
+                <div class="progress-ring">
+                  <div class="ring-center">
+                    <strong id="detailProgress">76%</strong>
+                  </div>
+                </div>
+
+                <div class="detail-copy">
+                  <p id="detailTeacher">Teacher: Mr. Kamau</p>
+                  <p id="detailSchedule">Next class: Today • 4:00 PM</p>
+                  <p id="detailSummary">
+                    A strong focus on algebra, problem-solving, and exam technique for the upcoming term tests.
+                  </p>
+                </div>
+              </div>
+            </article>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Somavanza | Progress</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+<link rel="manifest" href="assets/favicon/site.webmanifest"></head>
+  <body data-page="nav">
+    <div class="dashboard">
+      <aside class="sidebar">
+        <div class="logo-wrap">
+          <div class="brand-mark"><img src="assets/somavanza-logo.jpg" alt="Somavanza logo" class="brand-logo"></div>
+          <div>
+            <p>Somavanza</p>
+            <span>Campus</span>
+          </div>
+        </div>
+        <nav class="nav-menu">
+          <a href="dashboard.html">Overview</a>
+          <a href="my-classes.html">My classes</a>
+          <a href="subjects.html">Subjects</a>
+          <a class="active" href="progress.html">Progress</a>
+          <a href="materials.html">Materials</a>
+          <a href="assessment.html">Assessment</a>
+        </nav>
+      </aside>
+      <main class="content-panel">
+        <header class="topbar">
+          <div>
+            <p class="greeting">Academic growth</p>
+            <h1>Progress tracker</h1>
+          </div>
+          <div class="top-actions">
+            <button class="ghost-btn" onclick="window.location.href='dashboard.html'">Dashboard</button>
+            <button class="primary-btn" id="logoutBtn">Log out</button>
+          </div>
+        </header>
+        <section class="stats-grid">
+          <article class="stat-card gradient-one"><span>Homework average</span><strong id="homeworkOverallScore">—</strong><small id="homeworkOverallMeta">No graded homework yet</small></article>
+          <article class="stat-card gradient-two"><span>Best homework subject</span><strong id="homeworkBestSubject">—</strong><small id="homeworkBestSubjectMeta">No graded homework yet</small></article>
+          <article class="stat-card gradient-three"><span>Goals</span><strong>5</strong><small>On track</small></article>
+          <article class="stat-card gradient-four"><span>Homework submitted</span><strong id="homeworkSubmittedCount">0</strong><small>Including work awaiting a grade</small></article>
+        </section>
+
+        <section class="progress-grid">
+          <article class="panel-box mini-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Performance</p>
+                <h2>Subject progress</h2>
+              </div>
+              <span class="tag">Term 1</span>
+            </div>
+            <div class="class-list" id="homeworkProgressList"></div>
+          </article>
+
+          <article class="panel-box mini-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Focus</p>
+                <h2>Recommended targets</h2>
+              </div>
+            </div>
+            <div class="target-list">
+              <div class="target-item">
+                <strong>Mathematics</strong>
+                <span>Increase from 76% to 82%</span>
+              </div>
+              <div class="target-item">
+                <strong>Physics</strong>
+                <span>Complete revision pack this week</span>
+              </div>
+              <div class="target-item">
+                <strong>English</strong>
+                <span>Finish writing practice tasks</span>
+              </div>
+              <div class="target-item">
+                <strong>Biology</strong>
+                <span>Revise genetics and diagrams</span>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel-box" style="margin-top: 22px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Score trend</p>
+              <h2>Recent performance</h2>
+            </div>
+            <span class="tag">Last 5 assessments</span>
+          </div>
+
+          <div class="trend-chart" aria-label="Recent subject scores">
+            <div class="chart-bar" style="--value: 62%;"><span>62%</span></div>
+            <div class="chart-bar" style="--value: 68%;"><span>68%</span></div>
+            <div class="chart-bar" style="--value: 74%;"><span>74%</span></div>
+            <div class="chart-bar" style="--value: 81%;"><span>81%</span></div>
+            <div class="chart-bar" style="--value: 86%;"><span>86%</span></div>
+          </div>
+        </section>
+
+        <section class="panel-box" style="margin-top: 22px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Assessments</p>
+              <h2>Recent results</h2>
+            </div>
+            <span class="tag">Updated this week</span>
+          </div>
+
+          <div class="result-list">
+            <div class="result-item">
+              <div>
+                <strong>Mathematics quiz</strong>
+                <small>Algebra and equations</small>
+              </div>
+              <span class="result-score good">80%</span>
+            </div>
+            <div class="result-item">
+              <div>
+                <strong>Essay assignment</strong>
+                <small>Silent Song analysis</small>
+              </div>
+              <span class="result-score good">88%</span>
+            </div>
+            <div class="result-item">
+              <div>
+                <strong>Biology test</strong>
+                <small>Genetics and cells</small>
+              </div>
+              <span class="result-score mid">74%</span>
+            </div>
+            <div class="result-item">
+              <div>
+                <strong>Business case study</strong>
+                <small>Entrepreneurship</small>
+              </div>
+              <span class="result-score good">91%</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-box" style="margin-top: 22px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Holiday report</p>
+              <h2>Student progress report</h2>
+            </div>
+            <span class="tag">Issued by admin</span>
+          </div>
+          <div id="studentNotificationList" style="margin-bottom: 16px;"></div>
+          <div id="studentReportList"></div>
+        </section>
+
+        <section class="progress-grid lower-progress-grid" style="margin-top: 22px;">
+          <article class="panel-box mini-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Attendance</p>
+                <h2>Class attendance</h2>
+              </div>
+              <span class="tag">94%</span>
+            </div>
+            <div class="attendance-list">
+              <div class="attendance-item">
+                <span>Present</span>
+                <strong>33 / 35</strong>
+              </div>
+              <div class="attendance-item">
+                <span>Missed</span>
+                <strong>2 classes</strong>
+              </div>
+              <div class="attendance-item">
+                <span>On-time rate</span>
+                <strong>90%</strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel-box mini-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Teacher note</p>
+                <h2>Feedback</h2>
+              </div>
+            </div>
+            <div class="feedback-box">
+              <p>“You are doing well in writing and business studies. Keep revising genetics and practical maths problem solving to strengthen your consistency.”</p>
+              <strong>— Mr. Kamau</strong>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
